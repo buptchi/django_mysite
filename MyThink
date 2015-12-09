@@ -1,0 +1,12 @@
+/polls
+   ---> /polls/detail               post a  form
+     ---> polls.vote  (view ,not html)  save to db                              ----> /polls/results            show a results
+
+polls:vote is a url
+polls/results.html   a html
+
+in views.py ,function params is all "question_id"
+url name manage
+
+part4 use generic views 
+attribute name   override 

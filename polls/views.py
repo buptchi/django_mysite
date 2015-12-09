@@ -1,12 +1,25 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Question
-from django.template import RequestContext, loader
-from django.http import Http404
 from django.core.urlresolvers import reverse
+from django.views import generic
 
+from .models import Question, Choice
 
 # Create your views here.
+
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        return Question.objects.order_by('-pub_date')[:5]
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
+
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -28,7 +41,7 @@ def vote(request, question_id):
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'polls/detail.html', {
             'question':question ,
-            'error_message':'you did not select a choice ' ,
+            'error_message':"you did not select a choice " ,
             })
     else:
         selected_choice.votes += 1
